@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background-color: white;
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        h1 {
+            margin-bottom: 5px;
+        }
+
+        .tagline {
+            color: gray;
+            margin-bottom: 60px;
+        }
+
+        input {
+            width: 50%;
+            padding: 8px;
+            margin: 8px;
+        }
+
+        button {
+            padding: 8px 20px;
+            background-color: red;
+            color: white;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Project Title -->
+<h1>PERSONAL MEMORY MANAGEMENT</h1>
+<p class="tagline">~Craft your moments</p>
+
+<div class="box">
+    <h2>Login</h2>
+
+    <input type="email" id="email" placeholder="Enter Email"><br>
+    <input type="password" id="password" placeholder="Enter Password"><br>
+
+    <button onclick="login()">Login</button>
+
+    <p>New User?   <a href="register.html">Register</a></p>
+</div>
+
+<script>
+function login() {
+    let email = document.getElementById("email").value;
+    let password = document.getElementById("password").value;
+
+    fetch("http://127.0.0.1:5000/login", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            email: email,
+            password: password
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.status === "success") {
+            alert("Login Successful");
+            window.location.href = "calendar.html";
+        } else {
+            alert("Invalid Email or Password");
+        }
+    });
+}
+</script>
+
+</body>
+</html>

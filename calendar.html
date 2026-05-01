@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calendar</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            margin: 0;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 200px;
+            height: 100vh;
+            background-color: #f0f0f0;
+            position: fixed;
+            padding-top: 20px;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 10px;
+            color: black;
+        }
+
+        /* Main */
+        .main {
+            margin-left: 210px;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            width: auto;
+            margin: auto;
+            font-size: 18px;
+        }
+
+        .day {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .today {
+            color: green;
+            font-weight: bold;
+        }
+
+        .dayname {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <a href="calendar.html">Calendar</a>
+    <a href="search.html">Search</a>
+    <a href="login.html">Logout</a>
+</div>
+
+<!-- Main -->
+<div class="main">
+    <h2 id="monthYear"></h2>
+    <div class="calendar" id="calendar"></div>
+</div>
+
+<script>
+let cal = document.getElementById("calendar");
+
+let today = new Date();
+let year = today.getFullYear();
+let month = today.getMonth();
+
+const monthNames = ["January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"];
+
+document.getElementById("monthYear").innerText =
+    monthNames[month] + " " + year;
+
+// Day names
+const daysName = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+for (let d of daysName) {
+    let div = document.createElement("div");
+    div.innerText = d;
+    div.className = "dayname";
+    cal.appendChild(div);
+}
+
+// First day of month
+let firstDay = new Date(year, month, 1).getDay();
+
+// Empty spaces before 1
+for (let i = 0; i < firstDay; i++) {
+    let div = document.createElement("div");
+    cal.appendChild(div);
+}
+
+// Number of days
+let days = new Date(year, month + 1, 0).getDate();
+
+for (let i = 1; i <= days; i++) {
+    let div = document.createElement("div");
+    div.className = "day";
+    div.innerText = i;
+
+    if (i === today.getDate()) {
+        div.classList.add("today");
+    }
+
+    div.onclick = () => {
+        window.location.href = "diary.html?date=" + i + "&month=" + month + "&year=" + year;
+    };
+
+    cal.appendChild(div);
+}
+</script>
+
+</body>
+</html>

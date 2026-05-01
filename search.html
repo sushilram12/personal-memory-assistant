@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            margin: 0;
+        }
+
+        .sidebar {
+            width: 200px;
+            height: 100vh;
+            background-color: #f0f0f0;
+            position: fixed;
+            padding-top: 20px;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 10px;
+            color: black;
+            text-decoration: none;
+        }
+
+        .main {
+            margin-left: 210px;
+            text-align: center;
+            padding: 20px;
+        }
+
+        input {
+            width: 40%;
+            padding: 8px;
+            margin: 10px;
+        }
+
+        button {
+            padding: 8px 20px;
+            background-color: blue;
+            color: white;
+            border: none;
+        }
+
+        .result {
+            border: 1px solid gray;
+            margin: 10px auto;
+            padding: 10px;
+            width: 50%;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <a href="calendar.html">Calendar</a>
+    <a href="search.html">Search</a>
+    <a href="login.html">Logout</a>
+</div>
+
+<div class="main">
+    <h2>Search Memory</h2>
+
+    <input type="text" id="keyword" placeholder="Enter keyword">
+    <button onclick="search()">Search</button>
+
+    <div id="results"></div>
+</div>
+
+<script>
+function search() {
+    let keyword = document.getElementById("keyword").value;
+
+    fetch("http://127.0.0.1:5000/search", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({keyword: keyword})
+    })
+    .then(res => res.json())
+    .then(data => {
+        let resultsDiv = document.getElementById("results");
+        resultsDiv.innerHTML = "";
+
+        if(data.length === 0) {
+            resultsDiv.innerHTML = "No results found";
+            return;
+        }
+
+        data.forEach(item => {
+            let div = document.createElement("div");
+            div.className = "result";
+            div.innerHTML = item.date + "/" + (parseInt(item.month)+1) + "/" + item.year + "<br>" + item.note;
+
+            div.onclick = () => {
+                window.location.href = "diary.html?date=" + item.date + "&month=" + item.month + "&year=" + item.year;
+            };
+
+            resultsDiv.appendChild(div);
+        });
+    });
+}
+</script>
+
+</body>
+</html>
